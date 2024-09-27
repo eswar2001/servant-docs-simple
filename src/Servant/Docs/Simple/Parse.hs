@@ -43,7 +43,7 @@ __Example of parsing an API__
 
 -}
 
-{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE UndecidableInstances,FlexibleContexts #-}
 
 module Servant.Docs.Simple.Parse
        ( HasParsableEndpoint (..)

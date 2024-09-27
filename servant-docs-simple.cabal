@@ -1,6 +1,6 @@
-cabal-version:       2.4
+cabal-version:       3.0
 name:                servant-docs-simple
-version:             0.4.0.0
+version:             0.5.0.0
 synopsis:            Generate endpoints overview for Servant API
 
 description:
@@ -26,16 +26,16 @@ extra-source-files:  README.md
 tested-with:         GHC == 8.6.5
                      GHC == 8.8.4
                      GHC == 8.10.7
-
+                     GHC == 9.2.8
 
 source-repository head
   type:                git
   location:            https://github.com/Holmusk/servant-docs-simple.git
 
 common common-options
-  build-depends:       base >= 4.11.1.0 && < 5
-                     , aeson >= 1.4.2 && < 1.6
-                     , servant >= 0.15 && < 0.19
+  build-depends:    base
+                    , aeson
+                    , servant
 
   ghc-options:         -Wall
                        -Wcompat
@@ -69,10 +69,10 @@ common common-options
 
 library
   import:              common-options
-  build-depends:       aeson-pretty >= 0.8.7 && < 0.9
-                     , bytestring  >= 0.10.8.2 && < 0.12
-                     , prettyprinter >= 1.6 && < 1.8
-                     , text >= 1.2.3.1 && < 1.3
+  build-depends:       aeson-pretty
+                    , bytestring
+                    , prettyprinter
+                    , text
 
   hs-source-dirs:      src
 
@@ -85,11 +85,10 @@ test-suite servant-docs-simple-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-
   build-depends:       servant-docs-simple
-                     , hspec >= 2.7.1 && < 2.9
-                     , hspec-core >= 2.7.1 && < 2.9
-                     , raw-strings-qq >= 1.1 && < 1.2
+                    , hspec
+                    , hspec-core
+                    , raw-strings-qq
 
   other-modules:       Test.Servant.Docs.Simple
                        Test.Servant.Docs.Simple.Render

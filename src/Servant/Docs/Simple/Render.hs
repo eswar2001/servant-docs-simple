@@ -78,7 +78,7 @@ module Servant.Docs.Simple.Render
        , PlainText (..)
        ) where
 
-import Data.Aeson (ToJSON (..), Value (..), (.=), object)
+
 import Data.List (intersperse)
 import Data.Text (Text, pack)
 #if MIN_VERSION_prettyprinter(1,7,0)
@@ -89,6 +89,12 @@ import Prettyprinter.Render.Util.StackMachine (renderSimplyDecorated)
 import Data.Text.Prettyprint.Doc (Doc, annotate, defaultLayoutOptions, indent, layoutPretty, line,
                                   pretty, vcat, vsep)
 import Data.Text.Prettyprint.Doc.Render.Util.StackMachine (renderSimplyDecorated)
+#endif
+#if __GLASGOW_HASKELL__ >= 900
+import qualified Data.Aeson.Key as Key
+import Data.Aeson (ToJSON (..), Value (..), (.=), object)
+#else
+import Data.Aeson (ToJSON (..), Value (..), (.=), object)
 #endif
 
 -- | Intermediate documentation structure, a tree of endpoints
@@ -169,12 +175,19 @@ instance Renderable Json where
 
 instance ToJSON ApiDocs where
     toJSON (ApiDocs endpoints) =
+#if __GLASGOW_HASKELL__ >= 900
+        object $ fmap (\(route, details) -> (Key.fromText route) .= toJSON details) endpoints
+#else
         object $ fmap (\(route, details) -> route .= toJSON details) endpoints
+#endif
 
 instance ToJSON Details where
     toJSON (Detail t)   = String t
-    toJSON (Details ds) = object $ fmap (\(param, details) -> param .= toJSON details) ds
-
+#if __GLASGOW_HASKELL__ >= 900
+    toJSON (Details ds) = object $ fmap (\(param, details) ->  (Key.fromText param) .= toJSON details) ds
+#else
+    toJSON (Details ds) = object $ fmap (\(param, details) ->  param .= toJSON details) ds
+#endif
 -- | Conversion to prettyprint
 newtype Pretty = Pretty { getPretty :: Doc Ann }
 
